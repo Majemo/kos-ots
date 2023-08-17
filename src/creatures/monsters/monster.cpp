@@ -2006,6 +2006,22 @@ void Monster::dropLoot(Container* corpse, Creature*) {
 				corpse->internalAddThing(sliver);
 			}
 		}
+
+		// KosCoins
+
+		uint16_t kosCoinDropChance = mType->info.bestiaryStars * 2;
+		int coinLooted = normal_random(1, 100);
+		SPDLOG_WARN("[KosCoins] chance : {}, roll : {}", kosCoinDropChance, coinLooted);
+		if(kosCoinDropChance >= coinLooted) {
+			int kosCoinsAmount = normal_random(1, 10*mType->info.bestiaryStars);
+			Item* kosCoin = Item::CreateItem(37317, kosCoinsAmount);
+			if (g_game().internalAddItem(corpse, kosCoin) != RETURNVALUE_NOERROR) {
+				corpse->internalAddThing(kosCoin);
+			}
+		}
+
+
+
 		g_events().eventMonsterOnDropLoot(this, corpse);
 		g_callbacks().executeCallback(EventCallback_t::monsterOnDropLoot, &EventCallback::monsterOnDropLoot, this, corpse);
 	}

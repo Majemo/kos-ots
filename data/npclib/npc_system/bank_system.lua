@@ -1,4 +1,5 @@
 local count = {}
+local countTc = {}
 local transfer = {}
 local receiptFormat = "Date: %s\nType: %s\nGold Amount: %d\nReceipt Owner: %s\nRecipient: %s\n\n%s"
 
@@ -59,6 +60,11 @@ function Npc:parseBank(message, npc, creature, npcHandler)
 		count[playerId] = player:getMoney()
 		npcHandler:say(string.format("Would you really like to deposit %d gold?", count[playerId]), npc, creature)
 		npcHandler:setTopic(playerId, 2)
+	elseif MsgFind(message, "deposit tc") then
+
+		countTc[playerId] = player:getItemCount(37317)
+		npcHandler:say(string.format("Would you really like to deposit %d Tibia Coins?", countTc[playerId]), npc, creature)
+		npcHandler:setTopic(playerId, 3)
 	elseif MsgContains(message, "deposit") then
 		if string.match(message, "%d+") then
 			count[playerId] = getMoneyCount(message)
@@ -100,6 +106,21 @@ function Npc:parseBank(message, npc, creature, npcHandler)
 			else
 				npcHandler:say("You do not have enough gold.", npc, creature)
 			end
+		elseif MsgContains(message, "no") then
+			npcHandler:say("As you wish. Is there something else I can do for you?", npc, creature)
+		end
+		npcHandler:setTopic(playerId, 0)
+		return true
+	elseif npcHandler:getTopic(playerId) == 3 then
+		if MsgContains(message, "yes") then
+
+			if player:getItemCount(37317) >= countTc[playerId] and player:removeItem(37317, countTc[playerId]) then
+				db.query('UPDATE `accounts` SET `coins` = `coins` + ' .. countTc[playerId] ..' where `id`=' .. player:getAccountId())
+				npcHandler:say(string.format("Alright, we have added the amount of %d Tibia Coins to your account.", countTc[playerId]), npc, creature)
+			else
+				npcHandler:say("You do not have enough gold.", npc, creature)
+			end
+
 		elseif MsgContains(message, "no") then
 			npcHandler:say("As you wish. Is there something else I can do for you?", npc, creature)
 		end
