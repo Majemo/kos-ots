@@ -297,7 +297,7 @@ class Item : virtual public Thing, public ItemProperties {
 		static std::string getNameDescription(const ItemType &it, const Item* item = nullptr, int32_t subType = -1, bool addArticle = true);
 		static std::string getWeightDescription(const ItemType &it, uint32_t weight, uint32_t count = 1);
 
-		std::string getDescription(int32_t lookDistance) const override final;
+		std::string getDescription(int32_t lookDistance) const override;
 		std::string getNameDescription() const;
 		std::string getWeightDescription() const;
 
@@ -482,7 +482,7 @@ class Item : virtual public Thing, public ItemProperties {
 			return items[id].isDummy();
 		}
 
-		const std::string &getName() const {
+		virtual const std::string &getName() const {
 			if (hasAttribute(ItemAttribute_t::NAME)) {
 				return getString(ItemAttribute_t::NAME);
 			}

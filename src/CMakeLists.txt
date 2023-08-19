@@ -56,11 +56,7 @@ option(SPEED_UP_BUILD_UNITY "Compile using build unity for speed up build" ON)
 # *****************************************************************************
 # Project
 # *****************************************************************************
-if (MSVC)
-	add_executable(${PROJECT_NAME} "" ../cmake/canary.rc)
-else()
-	add_executable(${PROJECT_NAME} "")
-endif()
+add_executable(${PROJECT_NAME} "")
 
 # *****************************************************************************
 # Build flags
@@ -173,6 +169,7 @@ PRIVATE
 	creatures/creature.cpp
 	creatures/interactions/chat.cpp
 	creatures/monsters/monster.cpp
+	creatures/monsters/treasure_chest_monster.cpp
 	creatures/monsters/monsters.cpp
 	creatures/monsters/spawns/spawn_monster.cpp
 	creatures/npcs/npc.cpp
@@ -221,6 +218,8 @@ PRIVATE
 	items/containers/mailbox/mailbox.cpp
 	items/containers/rewards/reward.cpp
 	items/containers/rewards/rewardchest.cpp
+	items/containers/rewards/treasure_chest.cpp
+	items/containers/rewards/treasure_chests.cpp
 	items/cylinder.cpp
 	items/decay/decay.cpp
 	items/item.cpp
@@ -316,6 +315,8 @@ PRIVATE
 	server/signals.cpp
 	utils/tools.cpp
 	utils/wildcardtree.cpp
+
+
 )
 
 if (MSVC)

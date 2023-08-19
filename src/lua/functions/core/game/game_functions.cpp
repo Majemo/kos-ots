@@ -384,6 +384,7 @@ int GameFunctions::luaGameCreateContainer(lua_State* L) {
 	return 1;
 }
 
+
 int GameFunctions::luaGameCreateMonster(lua_State* L) {
 	// Game.createMonster(monsterName, position[, extended = false[, force = false[, master = nil]]])
 	Monster* monster = Monster::createMonster(getString(L, 1));

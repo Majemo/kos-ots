@@ -199,6 +199,7 @@ class MonsterType {
 		void loadLoot(MonsterType* monsterType, LootBlock lootblock);
 
 		bool canSpawn(const Position &pos);
+
 };
 
 class MonsterSpell {

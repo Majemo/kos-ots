@@ -32,6 +32,7 @@
 #include "io/io_bosstiary.hpp"
 
 #include "core.hpp"
+#include "items/containers/rewards/treasure_chests.h"
 
 std::mutex g_loaderLock;
 std::condition_variable g_loaderSignal;
@@ -187,6 +188,8 @@ void loadModules() {
 	modulesLoadHelper(g_modules().loadFromXml(), "modules/modules.xml");
 	modulesLoadHelper(g_events().loadFromXml(), "events/events.xml");
 	modulesLoadHelper((g_npcs().load(true, false)), "npclib");
+	//Kos-OTS
+	modulesLoadHelper(g_treasureChests().loadFromXml(), "XML/treasure_chests.xml");
 
 	SPDLOG_INFO("Loading datapack scripts on folder: {}/", datapackName);
 	modulesLoadHelper(g_scripts().loadScripts(datapackFolder + "/scripts/lib", true, false), datapackFolder + "/scripts/libs");

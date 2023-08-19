@@ -2008,18 +2008,20 @@ void Monster::dropLoot(Container* corpse, Creature*) {
 		}
 
 		// KosCoins
-
-		uint16_t kosCoinDropChance = mType->info.bestiaryStars * 2;
-		int coinLooted = normal_random(1, 100);
-		SPDLOG_WARN("[KosCoins] chance : {}, roll : {}", kosCoinDropChance, coinLooted);
-		if(kosCoinDropChance >= coinLooted) {
-			int kosCoinsAmount = normal_random(1, 10*mType->info.bestiaryStars);
-			Item* kosCoin = Item::CreateItem(37317, kosCoinsAmount);
-			if (g_game().internalAddItem(corpse, kosCoin) != RETURNVALUE_NOERROR) {
-				corpse->internalAddThing(kosCoin);
+		if (g_configManager().getBoolean(KOS_COINS_ENABLED)) {
+			SPDLOG_WARN("KosCoins enabled");
+			uint8_t dropRate = g_configManager().getNumber(KOS_COINS_DROP_RATE);
+			uint16_t kosCoinDropChance = 2 * dropRate;
+			int coinLooted = normal_random(1, 100);
+			SPDLOG_WARN("chance = {}% roll = {}", kosCoinDropChance,coinLooted);
+			if (kosCoinDropChance >= coinLooted) {
+				int kosCoinsAmount = normal_random(1, 10 * mType->info.bestiaryStars);
+				Item* kosCoin = Item::CreateItem(37317, kosCoinsAmount);
+				if (g_game().internalAddItem(corpse, kosCoin) != RETURNVALUE_NOERROR) {
+					corpse->internalAddThing(kosCoin);
+				}
 			}
 		}
-
 
 
 		g_events().eventMonsterOnDropLoot(this, corpse);
@@ -2202,4 +2204,7 @@ std::vector<std::pair<int8_t, int8_t>> Monster::getPushItemLocationOptions(const
 	}
 
 	return {};
+}
+void Monster::setTreasureChest(Item* item) {
+	treasureChest = item;
 }

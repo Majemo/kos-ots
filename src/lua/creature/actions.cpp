@@ -284,7 +284,10 @@ ReturnValue Actions::internalUseItem(Player* player, const Position &pos, uint8_
 	}
 
 	if (Container* container = item->getContainer()) {
+
 		Container* openContainer;
+
+
 
 		// depot container
 		if (DepotLocker* depot = container->getDepotLocker()) {
@@ -340,6 +343,17 @@ ReturnValue Actions::internalUseItem(Player* player, const Position &pos, uint8_
 			}
 		} else if (corpseOwner != 0 && !player->canOpenCorpse(corpseOwner)) {
 			return RETURNVALUE_YOUARENOTTHEOWNER;
+		}
+
+		// Treasure chest
+		if(TreasureChest* treasureChest = container->getTreasureChest()) {
+			if(treasureChest->isCompleted()) {
+				openContainer = container;
+			}else if(!treasureChest->isStarted()) {
+				treasureChest->start();
+				return RETURNVALUE_NOERROR;
+			}
+
 		}
 
 		// open/close container

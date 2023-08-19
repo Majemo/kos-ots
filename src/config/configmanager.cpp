@@ -374,6 +374,11 @@ bool ConfigManager::load() {
 	boolean[REWARD_CHEST_COLLECT_ENABLED] = getGlobalBoolean(L, "rewardChestCollectEnabled", true);
 	integer[REWARD_CHEST_MAX_COLLECT_ITEMS] = getGlobalNumber(L, "rewardChestMaxCollectItems", 200);
 
+	//Kos-OTS
+	boolean[KOS_COINS_ENABLED] = getGlobalBoolean(L, "kosCoinsEnabled", false);
+	integer[KOS_COINS_DROP_RATE] = getGlobalNumber(L, "kosCoinsDropRate", 1);
+	boolean[TREASURE_CHEST_ENABLED] = getGlobalBoolean(L, "treasureChestEnabled", false);
+
 	loaded = true;
 	lua_close(L);
 	return true;

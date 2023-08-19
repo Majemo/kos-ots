@@ -160,6 +160,9 @@ class ItemType {
 		bool isBed() const {
 			return (type == ITEM_TYPE_BED);
 		}
+		bool isTreasureChest() const {
+			return (type == ITEM_TYPE_TREASURE_CHEST);
+		}
 		bool isRune() const {
 			return (type == ITEM_TYPE_RUNE);
 		}

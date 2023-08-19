@@ -760,6 +760,13 @@ bool Creature::dropCorpse(Creature* lastHitCreature, Creature* mostDamageCreatur
 				deathEvent->executeOnDeath(this, corpse, lastHitCreature, mostDamageCreature, lastHitUnjustified, mostDamageUnjustified);
 			}
 		}
+
+		Player* player = mostDamageCreature->getPlayer();
+		if (g_configManager().getBoolean(TREASURE_CHEST_ENABLED)) {
+			if (player->canSpawnTreasureChest()) {
+				player->spawnRandomTreasureChest();
+			}
+		}
 	}
 
 	return true;

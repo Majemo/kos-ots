@@ -297,6 +297,7 @@ bool MonsterType::loadCallback(LuaScriptInterface* scriptInterface) {
 	return true;
 }
 
+
 MonsterType* Monsters::getMonsterType(const std::string &name) {
 	std::string lowerCaseName = asLowerCaseString(name);
 	if (auto it = monsters.find(lowerCaseName);

@@ -21,7 +21,7 @@ class Spawn;
 using CreatureHashSet = phmap::flat_hash_set<Creature*>;
 using CreatureList = std::list<Creature*>;
 
-class Monster final : public Creature {
+class Monster : public Creature {
 	public:
 		static Monster* createMonster(const std::string &name);
 		static int32_t despawnRange;
@@ -391,6 +391,10 @@ class Monster final : public Creature {
 		bool hazardDodge = false;
 		bool hazardDamageBoost = false;
 
+		// Kos-OTS
+		bool isTreasureMonster = false;
+		Item* treasureChest;
+
 		void onCreatureEnter(Creature* creature);
 		void onCreatureLeave(Creature* creature);
 		void onCreatureFound(Creature* creature, bool pushFront = false);
@@ -461,6 +465,7 @@ class Monster final : public Creature {
 		void doRandomStep(Direction &nextDirection, bool &result);
 
 		void onConditionStatusChange(const ConditionType_t &type);
+		void setTreasureChest(Item* item);
 };
 
 #endif // SRC_CREATURES_MONSTERS_MONSTER_H_

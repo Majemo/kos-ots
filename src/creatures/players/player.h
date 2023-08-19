@@ -30,9 +30,11 @@
 #include "server/network/protocol/protocolgame.h"
 #include "items/containers/rewards/reward.h"
 #include "items/containers/rewards/rewardchest.h"
+#include "items/containers/rewards/treasure_chest.h"
 #include "map/town.h"
 #include "vocations/vocation.h"
 #include "creatures/npcs/npc.h"
+#include "items/containers/rewards/treasure_chests.h"
 
 class House;
 class NetworkMessage;
@@ -2464,6 +2466,11 @@ class Player final : public Creature, public Cylinder {
 		void sendLootMessage(const std::string &message) const;
 
 		Container* getLootPouch() const;
+
+		//Kos-OTS
+		BaseTreasureChest getRandomTreasureChest();
+		void spawnRandomTreasureChest();
+		bool canSpawnTreasureChest();
 
 	private:
 		static uint32_t playerFirstID;

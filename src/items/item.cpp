@@ -55,7 +55,10 @@ Item* Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/, Position* it
 			newItem = new Mailbox(type);
 		} else if (it.isBed()) {
 			newItem = new BedItem(type);
-		} else {
+		}else if (it.isTreasureChest()) {
+			newItem = new BedItem(type);
+		}
+		else {
 			auto itemMap = ItemTransformationMap.find(static_cast<ItemID_t>(it.id));
 			if (itemMap != ItemTransformationMap.end()) {
 				newItem = new Item(itemMap->second, count);

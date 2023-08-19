@@ -2206,7 +2206,7 @@ void Player::addExperience(Creature* target, uint64_t exp, bool sendText /* = fa
 	if (sendText) {
 		std::string expString = fmt::format("{} experience point{}.", exp, (exp != 1 ? "s" : ""));
 		if (isVip()) {
-			uint8_t expPercent = g_configManager().getNumber(VIP_BONUS_EXP);
+			uint8_t expPercent = g_configManager().getNumber(KOS_COINS_DROP_RATE);
 			if (expPercent > 0) {
 				expString = expString + fmt::format(" (VIP bonus {}%)", expPercent > 100 ? 100 : expPercent);
 			}
@@ -7698,4 +7698,30 @@ Container* Player::getLootPouch() const {
 	}
 
 	return container;
+}
+
+BaseTreasureChest Player::getRandomTreasureChest() {
+
+	// todo filter treasure chests by level
+}
+void Player::spawnRandomTreasureChest() {
+
+	// Get list of loaded treasure chests
+	std::vector<BaseTreasureChest> baseTreasureChests = g_treasureChests().getTreasureChests();
+
+	// Rand treasure chest settings by level
+	std::srand(std::time(0));
+	int random_pos = std::rand() % baseTreasureChests.size();
+	BaseTreasureChest baseTreasureChest = baseTreasureChests[random_pos];
+
+	TreasureChest* treasureChest = TreasureChest::CreateTreasureChest(24861, this,baseTreasureChest);
+	g_game().internalAddItem(this->getTile(), treasureChest, INDEX_WHEREEVER, FLAG_NOLIMIT);
+
+	std::ostringstream ss;
+	ss << treasureChest->getName() << " has spawned";
+
+	treasureChest->yell(ss.str());
+}
+bool Player::canSpawnTreasureChest() {
+	return true;
 }
