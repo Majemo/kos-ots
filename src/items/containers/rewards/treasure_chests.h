@@ -15,14 +15,23 @@ struct BaseTreasureChestWave {
 		std::vector<std::string> monsters;
 };
 
+struct BaseTreasureChestReward {
+		BaseTreasureChestReward(uint16_t initItemId,int8_t initChance,int32_t initMinAmount, int32_t initMaxAmount) : itemId(initItemId), chance(initChance), minAmount(initMinAmount), maxAmount(initMaxAmount) {}
+		uint16_t itemId;
+		int8_t chance;
+		int32_t minAmount;
+		int32_t maxAmount;
+};
+
 
 struct BaseTreasureChest {
-		BaseTreasureChest(uint32_t initMinLevel,uint32_t initMaxLevel, std::string initName, std::string initBoss, std::vector<BaseTreasureChestWave> initWaves) : minLevel(initMinLevel),maxLevel(initMaxLevel),name(std::move(initName)),boss(std::move(initBoss)),waves(initWaves) {}
+		BaseTreasureChest(uint32_t initMinLevel,uint32_t initMaxLevel, std::string initName, std::string initBoss, std::vector<BaseTreasureChestWave> initWaves, std::vector<BaseTreasureChestReward> initRewards) : minLevel(initMinLevel),maxLevel(initMaxLevel),name(std::move(initName)),boss(std::move(initBoss)),waves(initWaves), rewards(initRewards) {}
 		uint32_t minLevel;
 		uint32_t maxLevel;
 		std::string name;
 		std::string boss;
 		std::vector<BaseTreasureChestWave> waves;
+		std::vector<BaseTreasureChestReward> rewards;
 };
 
 

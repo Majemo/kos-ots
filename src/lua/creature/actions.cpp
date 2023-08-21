@@ -347,13 +347,15 @@ ReturnValue Actions::internalUseItem(Player* player, const Position &pos, uint8_
 
 		// Treasure chest
 		if(TreasureChest* treasureChest = container->getTreasureChest()) {
-			if(treasureChest->isCompleted()) {
-				openContainer = container;
-			}else if(!treasureChest->isStarted()) {
-				treasureChest->start();
-				return RETURNVALUE_NOERROR;
+			SPDLOG_ERROR("fd {}",
+						 rewardId);
+			auto reward = player->getReward(rewardId, false);
+			if (!reward) {
+				return RETURNVALUE_YOUARENOTTHEOWNER;
 			}
-
+			if (reward->empty()) {
+				return RETURNVALUE_REWARDCONTAINERISEMPTY;
+			}
 		}
 
 		// open/close container

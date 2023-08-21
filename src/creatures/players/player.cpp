@@ -7715,12 +7715,7 @@ void Player::spawnRandomTreasureChest() {
 	BaseTreasureChest baseTreasureChest = baseTreasureChests[random_pos];
 
 	TreasureChest* treasureChest = TreasureChest::CreateTreasureChest(24861, this,baseTreasureChest);
-	g_game().internalAddItem(this->getTile(), treasureChest, INDEX_WHEREEVER, FLAG_NOLIMIT);
-
-	std::ostringstream ss;
-	ss << treasureChest->getName() << " has spawned";
-
-	treasureChest->yell(ss.str());
+	treasureChest->spawn();
 }
 bool Player::canSpawnTreasureChest() {
 	return true;

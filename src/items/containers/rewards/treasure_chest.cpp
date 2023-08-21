@@ -5,6 +5,7 @@
 #include <string>
 #include "treasure_chest.h"
 #include "game/game.h"
+#include "creatures/monsters/treasure_chest_monster.h"
 TreasureChest::TreasureChest(uint16_t type) :
 	Container(type) { }
 
@@ -51,7 +52,7 @@ std::string TreasureChest::getDescription(int32_t lookDistance) const {
 	ss << player->getName();
 	return ss.str();
 }
-TreasureChest* TreasureChest::CreateTreasureChest(const uint16_t type, Player* player, BaseTreasureChest baseTreasureChest) {
+TreasureChest* TreasureChest::CreateTreasureChest(const uint16_t type, Player* player, const BaseTreasureChest& baseTreasureChest) {
 	TreasureChest* treasureChest = new TreasureChest(type);
 	treasureChest->player = player;
 	treasureChest->position = &player->getPosition();
@@ -76,6 +77,41 @@ void TreasureChest::start() {
 	started = false;
 	completed = true;
 }
+void TreasureChest::startWave() {
+	BaseTreasureChestWave wave = baseTreasureChest->waves[stage];
+	currentWave.clear();
+
+
+
+}
+
 void TreasureChest::spawn() {
 	g_game().internalAddItem(tile, this, INDEX_WHEREEVER, FLAG_NOLIMIT);
+	this->dropLoot();
+}
+void TreasureChest::dropLoot() {
+	Item* remaindItem = Item::CreateItem(ITEM_CRYSTAL_COIN, 100);
+	int64_t rewardId = getTimeMsNow();
+	Reward* itemReward = player->getReward(rewardId, true);
+	SPDLOG_ERROR("item id {}", baseTreasureChest->rewards.size());
+	for (BaseTreasureChestReward reward : baseTreasureChest->rewards) {
+		SPDLOG_ERROR("item id {}", reward.itemId);
+		Item* item = Item::CreateItem(reward.itemId, 1);
+		itemReward->addItem(item);
+	}
+
+	Item* item = Item::CreateItem(ITEM_CRYSTAL_COIN, 1);
+	itemReward->addItem(item);
+	this->setAttribute(ItemAttribute_t::DATE, rewardId);
+	this->addThing(itemReward);
+	std::ostringstream lootMessage;
+	lootMessage << "Loot of " << getNameDescription() << ": " << itemReward->getContainer()->getContentDescription(player->getProtocolVersion() < 1200);
+	auto suffix = itemReward->getContainer()->getAttribute<std::string>(ItemAttribute_t::LOOTMESSAGE_SUFFIX);
+	if (!suffix.empty()) {
+		lootMessage << suffix;
+	}
+	player->sendLootMessage(lootMessage.str());
+
+}
+void TreasureChest::onMonsterDeath(TreasureChestMonster* killedMonster) {
 }

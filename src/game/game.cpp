@@ -2666,6 +2666,7 @@ ReturnValue Game::collectRewardChestItems(Player* player, uint32_t maxMoveItems 
 		ObjectCategory_t category = getObjectCategory(item);
 		if (internalCollectLootItems(player, item, category) == RETURNVALUE_NOERROR) {
 			movedRewardItems++;
+			player->sendLootStats(item, item->getItemCount());
 		}
 	}
 

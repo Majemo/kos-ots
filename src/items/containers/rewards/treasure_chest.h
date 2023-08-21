@@ -11,6 +11,7 @@
 #include "creatures/players/player.h"
 #include "game/movement/position.h"
 #include "treasure_chests.h"
+#include "creatures/monsters/treasure_chest_monster.h"
 
 class TreasureChest final : public Container {
 	public:
@@ -21,7 +22,7 @@ class TreasureChest final : public Container {
 		const TreasureChest* getTreasureChest() const final {
 			return this;
 		}
-		static TreasureChest* CreateTreasureChest(const uint16_t type, Player* player, BaseTreasureChest baseTreasureChest);
+		static TreasureChest* CreateTreasureChest(const uint16_t type, Player* player, const BaseTreasureChest& baseTreasureChest);
 		ReturnValue queryAdd(int32_t index, const Thing &thing, uint32_t count, uint32_t flags, Creature* actor = nullptr) const final;
 
 		void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, CylinderLink_t link = LINK_OWNER) final;
@@ -33,15 +34,15 @@ class TreasureChest final : public Container {
 
 		void removeItem(Thing* thing, bool sendToClient = false) override;
 		std::string getDescription(int32_t lookDistance) const override;
-		const std::string &getName() const {
-			return baseTreasureChest->name;
-		}
 
 		void start();
 		void yell(std::string message);
 		bool isCompleted();
 		bool isStarted();
 		void spawn();
+		void startWave();
+		void dropLoot();
+		void onMonsterDeath(TreasureChestMonster* killedMonster);
 
 	private:
 		Player* player = nullptr;
@@ -51,6 +52,7 @@ class TreasureChest final : public Container {
 		bool started = false;
 		bool completed = false;
 		const BaseTreasureChest* baseTreasureChest = nullptr;
+		std::list<TreasureChestMonster*> currentWave = std::list<TreasureChestMonster*>();
 };
 
 #endif // CANARY_TREASURE_CHEST_H

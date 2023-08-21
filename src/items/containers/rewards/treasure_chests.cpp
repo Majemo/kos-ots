@@ -34,16 +34,32 @@ bool TreasureChests::loadFromXml() {
 		std::string name = treasureChestNode.attribute("name").as_string();
 		std::string boss = wavesAttribute.attribute("boss").as_string();
 		std::vector<BaseTreasureChestWave> waves = std::vector<BaseTreasureChestWave>();
+		std::vector<BaseTreasureChestReward> rewards = std::vector<BaseTreasureChestReward>();
 
 
-		for (const auto &waveNode : doc.child("waves").children()) {
+		for (const auto &waveNode : treasureChestNode.child("waves").children()) {
 			auto monsters = std::vector<std::string>();
 			for (auto monsterNode : waveNode.children()) {
 				monsters.push_back(monsterNode.attribute("name").as_string());
 			}
 			waves.emplace_back(monsters);
 		}
-		basesTreasureChests.emplace_back(BaseTreasureChest(minLevel,maxLevel,name, boss, waves));
+
+
+
+		for (const auto &rewardNode : treasureChestNode.child("rewards").children()) {
+			SPDLOG_ERROR("id {}", rewardNode.attribute("id").value());
+			rewards.emplace_back(
+				static_cast<uint16_t>(pugi::cast<uint16_t>(rewardNode.attribute("id").value())),
+				static_cast<int8_t>(pugi::cast<uint16_t>(rewardNode.attribute("chance").value())),
+				static_cast<int32_t>(pugi::cast<int32_t>(rewardNode.attribute("minAmount").value())),
+				static_cast<int32_t>(pugi::cast<int32_t>(rewardNode.attribute("maxAmount").value()))
+			);
+		}
+		basesTreasureChests.emplace_back(BaseTreasureChest(minLevel,maxLevel,name, boss, waves, rewards));
+
+
+
 	}
 
 	return true;

@@ -9,7 +9,11 @@
 class TreasureChestMonster final : public Monster {
 	public:
 		explicit TreasureChestMonster(MonsterType* mType);
-		static TreasureChestMonster* createTreasureChestMonster(MonsterType* mType, TreasureChest* treasureChest);
+		static TreasureChestMonster* createTreasureChestMonster(std::string monsterName, TreasureChest* treasureChest);
+
+	protected:
+		void death(Creature* creature) override;
+
 	private:
 		TreasureChest* treasureChest;
 };
